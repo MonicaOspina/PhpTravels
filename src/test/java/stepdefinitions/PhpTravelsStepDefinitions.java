@@ -8,20 +8,21 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.SelectFromOptions;
-import net.serenitybdd.screenplay.actions.Switch;
 import net.serenitybdd.screenplay.questions.targets.TheTarget;
 import net.thucydides.core.annotations.Managed;
+import org.hamcrest.CoreMatchers;
 import org.openqa.selenium.WebDriver;
+import questions.Verificar;
 import tasks.*;
-import userinterfaces.AddCategoria;
 import userinterfaces.Menu;
 import userinterfaces.PhpTravelsPage;
 import userinterfaces.Post;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static userinterfaces.AddCategoria.*;
 import static userinterfaces.MapeoVerificacion.NAME;
+import static userinterfaces.MapeoVerificacion.SLUG;
 import static userinterfaces.Post.*;
 
 
@@ -32,47 +33,48 @@ public class PhpTravelsStepDefinitions {
     @Managed(driver = "chrome")
 
     private WebDriver herBrowser;
-    private Actor Monica = Actor.named("Monica");
+    private Actor Moni = Actor.named("Monica");
     private Object LoginPage;
 
 
     @Before
     public void setUp(){
-        Monica.can(BrowseTheWeb.with(herBrowser));
+        Moni.can(BrowseTheWeb.with(herBrowser));
     }
 
 
     @Given("^que Moni desea loguear en la pagina php travels$")
     public void queMoniDeseaLoguearEnLaPaginaPhpTravels()  {
-        Monica.wasAbleTo(OpenTheBrowser.on(phpTravelsPage));
-        Monica.wasAbleTo(Login.on("admin@phptravels.com","demoadmin"));
+        Moni.wasAbleTo(
+                OpenTheBrowser.on(phpTravelsPage),
+                Login.on("admin@phptravels.com","demoadmin"));
+
     }
 
     @When("^ella se loguea, agrega una categoría y comprueba que lo agregó$")
     public void ellaSeLogueaAgregaUnaCategoríaYCompruebaQueLoAgregó()  {
-        Monica.attemptsTo(GoTo.menu(Menu.BLOGS, Menu.BLOGS_CATEGORIA, Menu.ADD));
-        Monica.attemptsTo(Adicionar.categoria("Deporte", "B", "C",
-                "D","E","F","G", "H", "I"));
-        Monica.attemptsTo(SelectFromOptions.byIndex(0).from(HABILITAR));
-        Monica.attemptsTo(Click.on(ADD_CATEGORY));
-        //Monica.should(seeThat(TheTarget.textOf(NAME),is("Deporte")));
-        //Monica.attemptsTo(Switch.toFrame(BODY));
-
+        Moni.attemptsTo(
+                GoTo.menu(Menu.BLOGS, Menu.BLOGS_CATEGORIA, Menu.ADD),
+                Adicionar.categoria("Vacantes", "Selenium", "Serenity",
+                "Cucumber","Screenplay","POM","Java", "Scrum", "Pruebas"),
+                SelectFromOptions.byIndex(0).from(HABILITAR),
+                Click.on(ADD_CATEGORY));
+        Moni.should(
+                seeThat(TheTarget.textOf(NAME), CoreMatchers.is("Vacantes")),
+                seeThat(TheTarget.textOf(SLUG), CoreMatchers.is("Vacantes")),
+                seeThat(Verificar.category(NAME),equalTo("Vacantes"))
+               );
     }
-
 
 
     @Then("^ella vuelve a ingresar al menú y crea un post en la categoria anteriormente creada$")
     public void ellaVuelveAIngresarAlMenúYCreaUnPostEnLaCategoriaAnteriormenteCreada()  {
-        Monica.attemptsTo(Go.post(Menu.BLOG, Menu.BLOG_POST, Menu.ADD_POST));
-        Monica.attemptsTo(SelectFromOptions.byIndex(5).from(CATEGORIA));
-        Monica.attemptsTo(SelectFromOptions.byIndex(8).from(RELATED_POST));
-        Monica.attemptsTo(Crear.blog("Estas contratada", "Felicitaciones!!", "s", "y"));
-        Monica.attemptsTo(Click.on(Post.SUBMIT));
-
-
-
-
+        Moni.attemptsTo(
+                Go.post(Menu.BLOG, Menu.BLOG_POST, Menu.ADD_POST),
+                SelectFromOptions.byIndex(5).from(CATEGORIA),
+                SelectFromOptions.byIndex(8).from(RELATED_POST),
+                Crear.blog("Estas contratada", "Felicitaciones!!",
+                        "Vacantes", "Automatización"),
+                Click.on(Post.SUBMIT));
     }
-
 }

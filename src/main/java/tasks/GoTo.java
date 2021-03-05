@@ -11,8 +11,6 @@ import userinterfaces.Menu;
 
 public class GoTo implements Task {
 
-
-
     public static Performable menu;
     private Target blogs;
     private Target blogs_categoria;
@@ -26,15 +24,17 @@ public class GoTo implements Task {
     
     public static GoTo menu(Target blogs, Target blogs_categoria, Target add){
         return Tasks.instrumented(GoTo.class, blogs, blogs_categoria, add);
-    };
+    }
 
 
 
     @Override 
-    @Step("{0} go to menu")
+    @Step("{0} añade categoria")
     public <T extends Actor> void performAs(T actor) {
-        actor.attemptsTo(Click.on(Menu.BLOGS));
-        actor.attemptsTo(Click.on(Menu.BLOGS_CATEGORIA));
-        actor.attemptsTo(Click.on(Menu.ADD));
+        actor.attemptsTo(
+                Click.on(Menu.BLOGS),
+                Click.on(Menu.BLOGS_CATEGORIA),
+                Click.on(Menu.ADD)
+        );
     }
 }

@@ -14,20 +14,17 @@ public class OpenTheBrowser implements Task {
 
     //constructor
     public OpenTheBrowser(PageObject page){
-
         this.page = page;
     }
 
     //metodo
     public static OpenTheBrowser on(PageObject page) {
-        //page.driver
         return Tasks.instrumented(OpenTheBrowser.class, page);
     }
 
     @Override
-    @Step("{0} open the page")
+    @Step("{0} abre el navegador")
     public <T extends Actor> void performAs(T actor) {
-
         actor.attemptsTo(Open.browserOn(page));
     }
 }

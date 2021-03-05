@@ -1,6 +1,7 @@
 package tasks;
 
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.Tasks;
 import net.serenitybdd.screenplay.actions.Click;
@@ -23,12 +24,13 @@ public class Login implements Task {
         return Tasks.instrumented(Login.class, user, password);
     }
 
+
     @Override
-    @Step("{0} login in the page with user and password")
+    @Step("{0} se loguea en la pagina ocn usuario y contraseña")
     public <T extends Actor> void performAs(T actor) {
     actor.attemptsTo(
-        Enter.theValue(user).into(LoginPanel.USER).thenHit(Keys.TAB),
-        Enter.theValue(password).into(LoginPanel.PASSWORD).thenHit(Keys.TAB),
+        Enter.theValue(user).into(LoginPanel.USER),
+        Enter.theValue(password).into(LoginPanel.PASSWORD),
         Click.on(LoginPanel.BOTON_LOGIN));
     }
 }

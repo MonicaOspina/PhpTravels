@@ -5,6 +5,7 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.Tasks;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.targets.Target;
+import net.thucydides.core.annotations.Step;
 import userinterfaces.Menu;
 
 public class Go implements Task {
@@ -23,10 +24,11 @@ public class Go implements Task {
         return Tasks.instrumented(Go.class, blogs, blog_post, addpost);
     }
     @Override
+    @Step("{0} va a blogs post")
     public <T extends Actor> void performAs(T actor) {
-        actor.attemptsTo(Click.on(Menu.BLOGS));
-        actor.attemptsTo(Click.on(Menu.BLOG_POST));
-        actor.attemptsTo(Click.on(Menu.ADD_POST));
-
-    }
+        actor.attemptsTo(
+                Click.on(Menu.BLOGS),
+                Click.on(Menu.BLOG_POST),
+                Click.on(Menu.ADD_POST));
+        }
 }
